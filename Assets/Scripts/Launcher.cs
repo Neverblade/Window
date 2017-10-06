@@ -4,73 +4,26 @@ using UnityEngine;
 
 public class Launcher : Photon.PunBehaviour {
 
-    public PhotonLogLevel logLevel = PhotonLogLevel.Informational; // Debugging purposes
-    public byte maxPlayersPerRoom = 4;
-
-    public GameObject controlPanel;
-    public GameObject progressLabel;
-
-    string _gameVersion = "1";
-    bool isConnecting;
-
     void Awake()
     {
-        PhotonNetwork.logLevel = logLevel;
-        PhotonNetwork.autoJoinLobby = false; // Can view list of rooms without joining lobby
-        PhotonNetwork.automaticallySyncScene = true; // Master client brings all others to to same scene
-
+        PhotonNetwork.autoJoinLobby = false;
+        PhotonNetwork.automaticallySyncScene = false;
     }
 
-    // Use this for initialization
     void Start () {
-        progressLabel.SetActive(false);
-        controlPanel.SetActive(true);
-	}
 
-    public void Connect()
-    {
-        isConnecting = true;
-        progressLabel.SetActive(true);
-        controlPanel.SetActive(false);
+        // Create the appropriate entity and entity gameobject.
+        GameObject entityObject = new GameObject();
+        DontDestroyOnLoad(entityObject);
+        Entity entity = null;
 
-        if (PhotonNetwork.connected)
-        {
-            PhotonNetwork.JoinRandomRoom();
-        } else
-        {
-            PhotonNetwork.ConnectUsingSettings(_gameVersion);
-        }
-    }
+#if UNITY_STANDALONE
+        entity = entityObject.AddComponent<OculusEntity>();
+#elif UNITY_IOS || UNITY_ANDROID
+        entity = entityObject.AddComponent<MobileEntity>();
+#endif
 
-
-    public override void OnConnectedToMaster()
-    {
-        Debug.Log("Launcher: OnConnectedToMaster() was called by PUN");
-        if (isConnecting)
-            PhotonNetwork.JoinRandomRoom();
-    }
-
-    public override void OnDisconnectedFromPhoton()
-    {
-        progressLabel.SetActive(false);
-        controlPanel.SetActive(true);
-        Debug.Log("Launcher: OnDisconnectedFromPhoton() was called by PUN");
-    }
-
-    public override void OnPhotonRandomJoinFailed(object[] codeAndMsg)
-    {
-        Debug.Log("Launcher: OnPhotonRandomJoinFailed() was called by PUN. No random room available. Creating one.");
-        PhotonNetwork.CreateRoom(null, new RoomOptions() { MaxPlayers = maxPlayersPerRoom }, null);
-    }
-
-    public override void OnJoinedRoom()
-    {
-        Debug.Log("Launcher: OnJoinedRoom() was called by PUN. Client is now in room.");
-
-        if (PhotonNetwork.room.PlayerCount == 1)
-        {
-            Debug.Log("We load 'Room for 1'");
-            PhotonNetwork.LoadLevel("Room for 1");
-        }
+        // Initialize lobby logic for the corresponding device.
+        entity.InitializeLobby();
     }
 }
