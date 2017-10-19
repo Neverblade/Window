@@ -52,7 +52,6 @@ GameObject:
   - component: {fileID: 4757274460584730}
   - component: {fileID: 114677379339246028}
   - component: {fileID: 114159462905555406}
-  - component: {fileID: 114664007131833562}
   m_Layer: 0
   m_Name: OVRCameraRig
   m_TagString: Untagged
@@ -385,24 +384,6 @@ MonoBehaviour:
   useRotationTracking: 1
   useIPDInPositionTracking: 1
   resetTrackerOnLoad: 0
---- !u!114 &114664007131833562
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1537138304284766}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b8ed7f81a88c1d4cb342a5ba74a8144, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  corners:
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
-  guidePrefab: {fileID: 1969435208117670, guid: 7ae5b51332b0de6488dd1e626ba1c1dc,
-    type: 2}
 --- !u!114 &114677379339246028
 MonoBehaviour:
   m_ObjectHideFlags: 1

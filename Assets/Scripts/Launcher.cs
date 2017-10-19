@@ -5,9 +5,10 @@ using UnityEngine;
 public class Launcher : Photon.PunBehaviour {
 
     public int logLevel = 3;
+
+    public GameObject oculusEntityPrefab;
     public GameObject oculusPrefab;
     public GameObject touchPrefab;
-    public GameObject mobilePrefab;
 
     public byte maxPlayers = 4;
 
@@ -30,12 +31,15 @@ public class Launcher : Photon.PunBehaviour {
         GameObject entityObject = null;
 
 #if UNITY_STANDALONE
-        entityObject = Instantiate(oculusPrefab);
-        Instantiate(touchPrefab);
+        entityObject = Instantiate(oculusEntityPrefab);
+        OculusEntity oculusEntity = entityObject.GetComponent<OculusEntity>();
+        oculusEntity.cameraRig = Instantiate(oculusPrefab);
+        oculusEntity.localAvatar = Instantiate(touchPrefab);
 #elif UNITY_IOS || UNITY_ANDROID
-        entityObject = Instantiate(mobilePrefab);
+
 #endif
 
+        DontDestroyOnLoad(entityObject);
         entity = entityObject.GetComponent<Entity>();
     }
 
