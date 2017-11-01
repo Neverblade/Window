@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class Entity : MonoBehaviour {
 
-	public virtual void InitializeHost()
+    private void Update()
+    {
+        SpectatorUpdate();
+    }
+
+    public virtual void InitializeHost()
     {
 
     }

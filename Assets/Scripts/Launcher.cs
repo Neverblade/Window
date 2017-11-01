@@ -1,17 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VR;
 
 public class Launcher : Photon.PunBehaviour {
 
-    public int logLevel = 3;
-
+    // Oculus Entities
     public GameObject oculusEntityPrefab;
     public GameObject oculusPrefab;
     public GameObject touchPrefab;
 
-    public byte maxPlayers = 4;
+    // PC Entities
+    public GameObject pcEntityPrefab;
 
+    public int logLevel = 3;
+    public byte maxPlayers = 4;
     string _gameVersion = "1";
 
     Entity entity;
@@ -23,6 +26,13 @@ public class Launcher : Photon.PunBehaviour {
     }
 
     void Start () {
+        StartCoroutine(LateStart());
+    }
+
+    IEnumerator LateStart()
+    {
+        // Wait for headset initialization to finish
+        yield return new WaitForSeconds(0.1f);
 
         // Attempt to connect
         Connect();
@@ -31,10 +41,18 @@ public class Launcher : Photon.PunBehaviour {
         GameObject entityObject = null;
 
 #if UNITY_STANDALONE
-        entityObject = Instantiate(oculusEntityPrefab);
-        OculusEntity oculusEntity = entityObject.GetComponent<OculusEntity>();
-        oculusEntity.cameraRig = Instantiate(oculusPrefab);
-        oculusEntity.localAvatar = Instantiate(touchPrefab);
+        if (VRDevice.isPresent)
+        {
+            entityObject = Instantiate(oculusEntityPrefab);
+            OculusEntity oculusEntity = entityObject.GetComponent<OculusEntity>();
+            oculusEntity.cameraRig = Instantiate(oculusPrefab);
+            oculusEntity.localAvatar = Instantiate(touchPrefab);
+        }
+        else
+        {
+            entityObject = Instantiate(pcEntityPrefab);
+        }
+
 #elif UNITY_IOS || UNITY_ANDROID
 
 #endif

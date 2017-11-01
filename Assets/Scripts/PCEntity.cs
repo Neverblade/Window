@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MobileEntity : Entity {
+public class PCEntity : Entity {
+
+    public GameObject canvasPrefab; // Prefab for the input menu
+
 
 	// Use this for initialization
 	void Start () {

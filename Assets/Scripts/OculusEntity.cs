@@ -9,6 +9,7 @@ public class OculusEntity : Entity {
     public Vector3[] corners = new Vector3[4];
     public Vector3 markerCenter;
     public Vector3 markerNormal;
+
     public GameObject guidePrefab;
 
     [HideInInspector]
