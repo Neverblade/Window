@@ -1,35 +1,44 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;   
 
 public class OculusEntity : Entity {
 
     public static Vector3 guideOffset = new Vector3(0, 0, 0);
 
     public Vector3[] corners = new Vector3[4];
-    public Vector3 markerCenter;
-    public Vector3 markerNormal;
 
+    // Initialization Prefabs
     public GameObject guidePrefab;
+    public GameObject initCameraRigPrefab;
+    public GameObject initLocalAvatarPrefab;
 
-    [HideInInspector]
-    public GameObject cameraRig, localAvatar;
+    // Post-Initialization Prefabs
+    public GameObject cameraRigPrefab;
+    public GameObject localAvatarPrefab;
 
+    // Initialization Variables
     GameObject head;
     GameObject leftController;
     GameObject rightController;
+    GameObject leftGuide;
+    GameObject rightGuide;
     float previousLeftTriggerValue;
     float leftTriggerValue;
     float previousRightTriggerValue;
     float rightTriggerValue;
-
     bool trackingInput = false;
     int cornersFilled = 0;
-    GameObject leftGuide;
-    GameObject rightGuide;
 
-    private void Start()
+    public override void Start()
     {
+        base.Start();
+
+        // Create CameraRig and Avatar
+        GameObject cameraRig = Instantiate(initCameraRigPrefab);
+        GameObject localAvatar = Instantiate(initLocalAvatarPrefab);
+
         // Assign variables
         head = cameraRig.transform.Find("TrackingSpace").Find("CenterEyeAnchor").gameObject;
         leftController = cameraRig.transform.Find("TrackingSpace").Find("LeftHandAnchor").gameObject;
@@ -59,7 +68,6 @@ public class OculusEntity : Entity {
                     StopTracking();
                     return;
                 }
-                    
             }
 
             if (rightTriggered)
@@ -97,11 +105,11 @@ public class OculusEntity : Entity {
         trackingInput = false;
 
         // Remove the guides
-        Destroy(leftGuide);
-        Destroy(rightGuide);
+        Destroy(leftGuide); leftGuide = null;
+        Destroy(rightGuide); rightGuide = null;
 
         // Average to get the center of the 4 points
-        markerCenter = Vector3.zero;
+        Vector3 markerCenter = Vector3.zero;
         foreach (Vector3 pos in corners)
             markerCenter += pos;
         markerCenter /= 4;
@@ -120,10 +128,14 @@ public class OculusEntity : Entity {
         }
 
         // Average normals
-        markerNormal = Vector3.zero;
+        Vector3 markerNormal = Vector3.zero;
         foreach (Vector3 normal in normals)
             markerNormal += normal;
         markerNormal /= 4;
+
+        // Fill in markerTransform data
+        markerPosition = markerCenter;
+        markerRotation = Quaternion.LookRotation(markerNormal, Vector3.up);
 
         // Ready to join room.
         OnHostInitializationFinished();
@@ -135,9 +147,8 @@ public class OculusEntity : Entity {
         StartTracking();
     }
 
-    // Called when player has finished host setup.
-    public override void OnHostInitializationFinished()
+    public override void InitializeSpectator()
     {
-        PhotonNetwork.LoadLevel("TestMap");
+        base.InitializeSpectator();
     }
 }

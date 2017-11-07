@@ -5,12 +5,10 @@ using UnityEngine.VR;
 
 public class Launcher : Photon.PunBehaviour {
 
-    // Oculus Entities
+    // Oculus Entity
     public GameObject oculusEntityPrefab;
-    public GameObject oculusPrefab;
-    public GameObject touchPrefab;
 
-    // PC Entities
+    // PC Entity
     public GameObject pcEntityPrefab;
 
     public int logLevel = 3;
@@ -44,9 +42,6 @@ public class Launcher : Photon.PunBehaviour {
         if (VRDevice.isPresent)
         {
             entityObject = Instantiate(oculusEntityPrefab);
-            OculusEntity oculusEntity = entityObject.GetComponent<OculusEntity>();
-            oculusEntity.cameraRig = Instantiate(oculusPrefab);
-            oculusEntity.localAvatar = Instantiate(touchPrefab);
         }
         else
         {
@@ -94,6 +89,7 @@ public class Launcher : Photon.PunBehaviour {
     {
         Log("Failed to join room. Creating a new one.");
         PhotonNetwork.CreateRoom(null, new RoomOptions() { MaxPlayers = this.maxPlayers }, null);
+        entity.isHost = true;
         entity.InitializeHost();
 
     }
@@ -102,6 +98,11 @@ public class Launcher : Photon.PunBehaviour {
     public override void OnJoinedRoom()
     {
         Log("Joined a room.");
+        if (PhotonNetwork.room.PlayerCount > 1)
+        {
+            entity.isHost = false;
+            entity.InitializeSpectator();
+        }
     }
 
     public void Log(string msg, int importance = 3)

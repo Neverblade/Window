@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1595841754167152}
+  m_IsPrefabParent: 1
+--- !u!1 &1595841754167152
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4761285079956566}
+  - component: {fileID: 114411736725675332}
+  m_Layer: 0
+  m_Name: PCEntity
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4761285079956566
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1595841754167152}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114411736725675332
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1595841754167152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 390c28f6bbfb2bb4c93b660b798833cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  markerPrefab: {fileID: 1006903279394090, guid: c93d5cf05d0ab7a44a334fd9ff86a994,
+    type: 2}
+  markerPosition: {x: 0, y: 0, z: 0}
+  markerRotation: {x: 0, y: 0, z: 0, w: 0}
+  marker: {fileID: 0}
+  mapName: TestMap
+  markerName: _Marker
+  cameraPrefab: {fileID: 1626610742114076, guid: 95408503b75f1da4c8fe4a7cb8fbec26,
+    type: 2}
+  canvasPrefab: {fileID: 1351297224911438, guid: 3c01162cce51b424fb3013656cba64b9,
+    type: 2}
+  eventSystemPrefab: {fileID: 1213323647937100, guid: fb2540924734a814ba4b3280592bf5dc,
+    type: 2}
+  camera: {fileID: 0}
+  canvas: {fileID: 0}
+  eventSystem: {fileID: 0}
