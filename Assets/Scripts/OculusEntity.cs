@@ -11,8 +11,8 @@ public class OculusEntity : Entity {
 
     // Initialization Prefabs
     public GameObject guidePrefab;
-    public GameObject initCameraRigPrefab;
-    public GameObject initLocalAvatarPrefab;
+    public GameObject preCameraRigPrefab;
+    public GameObject preLocalAvatarPrefab;
 
     // Post-Initialization Prefabs
     public GameObject cameraRigPrefab;
@@ -31,13 +31,13 @@ public class OculusEntity : Entity {
     bool trackingInput = false;
     int cornersFilled = 0;
 
-    public override void Start()
+    public void Start()
     {
-        base.Start();
-
         // Create CameraRig and Avatar
-        GameObject cameraRig = Instantiate(initCameraRigPrefab);
-        GameObject localAvatar = Instantiate(initLocalAvatarPrefab);
+        GameObject cameraRig = Instantiate(preCameraRigPrefab);
+        cameraRig.name = preCameraRigPrefab.name;
+        GameObject localAvatar = Instantiate(preLocalAvatarPrefab);
+        localAvatar.name = preLocalAvatarPrefab.name;
 
         // Assign variables
         head = cameraRig.transform.Find("TrackingSpace").Find("CenterEyeAnchor").gameObject;
@@ -147,8 +147,8 @@ public class OculusEntity : Entity {
         StartTracking();
     }
 
-    public override void InitializeSpectator()
+    public override void InitializeClient()
     {
-        base.InitializeSpectator();
+        
     }
 }

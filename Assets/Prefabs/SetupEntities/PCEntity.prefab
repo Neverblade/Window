@@ -51,19 +51,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 390c28f6bbfb2bb4c93b660b798833cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  markerPrefab: {fileID: 1006903279394090, guid: c93d5cf05d0ab7a44a334fd9ff86a994,
-    type: 2}
   markerPosition: {x: 0, y: 0, z: 0}
   markerRotation: {x: 0, y: 0, z: 0, w: 0}
   marker: {fileID: 0}
-  mapName: TestMap
-  markerName: _Marker
+  markerPrefabName: _Marker
   cameraPrefab: {fileID: 1626610742114076, guid: 95408503b75f1da4c8fe4a7cb8fbec26,
     type: 2}
   canvasPrefab: {fileID: 1351297224911438, guid: 3c01162cce51b424fb3013656cba64b9,
     type: 2}
   eventSystemPrefab: {fileID: 1213323647937100, guid: fb2540924734a814ba4b3280592bf5dc,
     type: 2}
-  camera: {fileID: 0}
+  cam: {fileID: 0}
   canvas: {fileID: 0}
   eventSystem: {fileID: 0}
+  postCameraPrefabName: PCPostCamera

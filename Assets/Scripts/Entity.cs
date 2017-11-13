@@ -6,60 +6,48 @@ using UnityEngine.SceneManagement;
 public class Entity : MonoBehaviour {
 
     [Header("Base Entity Properties")]
-    public GameObject markerPrefab;
 
     // Position/Rotation of the marker relative to you
     public Vector3 markerPosition;
     public Quaternion markerRotation;
 
-    public bool isHost = false;
-
     public GameObject marker;
-    public string mapName = "TestMap";
-    public string markerName = "_Marker";
-
-    public virtual void Start()
-    {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
+    public string markerPrefabName = "_Marker";
 
     public virtual void InitializeHost()
     {
 
     }
 
-    // Should happen AFTER any entity specific behaviour.
     public virtual void OnHostInitializationFinished()
     {
-        PhotonNetwork.LoadLevel(mapName);
+
     }
 
-    public virtual void InitializeSpectator()
+    public virtual void InitializeClient()
     {
 
     }
 
-    public virtual void OnInitializeSpectatorFinished()
+    public virtual void OnClientInitializationFinished()
     {
-        PhotonNetwork.LoadLevel(mapName);
+
     }
 
-    public virtual void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    // Should happen BEFORE any entity specific behaviour.
+    public void PositionEntity()
     {
-        // Only applicable when joining the room's scene.
-        if (!scene.name.Equals(mapName))
-            return;
-
         // Check if the marker object exists.
         // If it doesn't, spawn and position it.
         // If it does, position yourself relative to it.
-        marker = GameObject.Find(markerName);
-        if (isHost)
+        marker = GameObject.Find(markerPrefabName + "(Clone)");
+        if (marker == null)
         {
-            Destroy(marker);
-            marker = PhotonNetwork.Instantiate(markerName, markerPosition, markerRotation, 0);
+            print("Entity: Marker doesn't exist, creating it.");
+            marker = PhotonNetwork.Instantiate(markerPrefabName, markerPosition, markerRotation, 0);
         } else
         {
+            print("Entity: Marker exists, positioning myself.");
             GameObject tempObject = new GameObject("TempObject");
             tempObject.transform.SetPositionAndRotation(markerPosition, markerRotation);
             Vector3 localPos = tempObject.transform.InverseTransformPoint(transform.position);

@@ -47,12 +47,11 @@ public class Launcher : Photon.PunBehaviour {
         {
             entityObject = Instantiate(pcEntityPrefab);
         }
-
+            
 #elif UNITY_IOS || UNITY_ANDROID
 
 #endif
 
-        DontDestroyOnLoad(entityObject);
         entity = entityObject.GetComponent<Entity>();
     }
 
@@ -73,15 +72,14 @@ public class Launcher : Photon.PunBehaviour {
     // Called when a connection succeeds.
     public override void OnConnectedToMaster()
     {
-        Log("Connected.");
-        Log("Joining a room...");
+        Log("Connected. Joining a room...");
         PhotonNetwork.JoinRandomRoom();
     }
 
     // Called when a connection fails.
     public override void OnDisconnectedFromPhoton()
     {
-        Log("Failed to connect.", 1);
+        Log("Failed to connect. :(", 1);
     }
 
     // Called when joining a room fails.
@@ -89,9 +87,7 @@ public class Launcher : Photon.PunBehaviour {
     {
         Log("Failed to join room. Creating a new one.");
         PhotonNetwork.CreateRoom(null, new RoomOptions() { MaxPlayers = this.maxPlayers }, null);
-        entity.isHost = true;
         entity.InitializeHost();
-
     }
 
     // Called when a room was joined.
@@ -99,17 +95,12 @@ public class Launcher : Photon.PunBehaviour {
     {
         Log("Joined a room.");
         if (PhotonNetwork.room.PlayerCount > 1)
-        {
-            entity.isHost = false;
-            entity.InitializeSpectator();
-        }
+            entity.InitializeClient();
     }
 
     public void Log(string msg, int importance = 3)
     {
         if (importance <= logLevel)
-        {
             print("Launcher: " + msg);
-        }
     }
 }
