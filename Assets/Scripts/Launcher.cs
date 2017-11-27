@@ -40,13 +40,9 @@ public class Launcher : Photon.PunBehaviour {
 
 #if UNITY_STANDALONE
         if (VRDevice.isPresent)
-        {
             entityObject = Instantiate(oculusEntityPrefab);
-        }
         else
-        {
             entityObject = Instantiate(pcEntityPrefab);
-        }
             
 #elif UNITY_IOS || UNITY_ANDROID
 

@@ -34,7 +34,7 @@ public class Entity : MonoBehaviour {
 
     }
 
-    // Should happen BEFORE any entity specific behaviour.
+    // Utility function to position the entity object appropriately.
     public void PositionEntity()
     {
         // Check if the marker object exists.
@@ -50,10 +50,13 @@ public class Entity : MonoBehaviour {
             print("Entity: Marker exists, positioning myself.");
             GameObject tempObject = new GameObject("TempObject");
             tempObject.transform.SetPositionAndRotation(markerPosition, markerRotation);
+            print("tempObject Eulers: " + tempObject.transform.eulerAngles);
             Vector3 localPos = tempObject.transform.InverseTransformPoint(transform.position);
-            Vector3 localEuler = tempObject.transform.InverseTransformDirection(transform.eulerAngles);
+            Vector3 localDir = tempObject.transform.InverseTransformDirection(transform.rotation * Vector3.forward);
             transform.position = marker.transform.TransformPoint(localPos);
-            transform.eulerAngles = marker.transform.TransformDirection(localEuler);
+            Vector3 newDir = marker.transform.TransformDirection(localDir);
+            transform.rotation = Quaternion.LookRotation(newDir);
+            print("Eulers in real space: " + transform.eulerAngles);
             Destroy(tempObject);
         }
     }

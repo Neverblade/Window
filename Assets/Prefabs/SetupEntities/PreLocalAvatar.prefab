@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 82181118638645010}
   - component: {fileID: 114475040255671238}
   m_Layer: 0
-  m_Name: LocalAvatar
+  m_Name: PreLocalAvatar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

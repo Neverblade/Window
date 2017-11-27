@@ -14,9 +14,14 @@ public class OculusEntity : Entity {
     public GameObject preCameraRigPrefab;
     public GameObject preLocalAvatarPrefab;
 
-    // Post-Initialization Prefabs
+    // Post-Initialization Prefab Names
     public GameObject cameraRigPrefab;
     public GameObject localAvatarPrefab;
+    public string ovrAvatarPrefabName;
+
+    // CameraRig and LocalAvatar
+    private GameObject cameraRig;
+    private GameObject localAvatar;
 
     // Initialization Variables
     GameObject head;
@@ -30,13 +35,14 @@ public class OculusEntity : Entity {
     float rightTriggerValue;
     bool trackingInput = false;
     int cornersFilled = 0;
+    List<GameObject> cornerObjects = new List<GameObject>();
 
     public void Start()
     {
         // Create CameraRig and Avatar
-        GameObject cameraRig = Instantiate(preCameraRigPrefab);
+        cameraRig = Instantiate(preCameraRigPrefab);
         cameraRig.name = preCameraRigPrefab.name;
-        GameObject localAvatar = Instantiate(preLocalAvatarPrefab);
+        localAvatar = Instantiate(preLocalAvatarPrefab);
         localAvatar.name = preLocalAvatarPrefab.name;
 
         // Assign variables
@@ -61,7 +67,8 @@ public class OculusEntity : Entity {
             if (leftTriggered)
             {
                 corners[cornersFilled] = leftGuide.transform.position;
-                Instantiate(guidePrefab, corners[cornersFilled], Quaternion.identity);
+                GameObject g = Instantiate(guidePrefab, corners[cornersFilled], Quaternion.identity);
+                cornerObjects.Add(g);
                 cornersFilled++;
                 if (cornersFilled >= 4)
                 {
@@ -73,7 +80,8 @@ public class OculusEntity : Entity {
             if (rightTriggered)
             {
                 corners[cornersFilled] = rightGuide.transform.position;
-                Instantiate(guidePrefab, corners[cornersFilled], Quaternion.identity);
+                GameObject g = Instantiate(guidePrefab, corners[cornersFilled], Quaternion.identity);
+                cornerObjects.Add(g);
                 cornersFilled++;
                 if (cornersFilled >= 4)
                 {
@@ -137,6 +145,11 @@ public class OculusEntity : Entity {
         markerPosition = markerCenter;
         markerRotation = Quaternion.LookRotation(markerNormal, Vector3.up);
 
+        // Remove the guide objects.
+        foreach (GameObject g in cornerObjects)
+            Destroy(g);
+        cornerObjects.Clear();
+
         // Ready to join room.
         OnHostInitializationFinished();
     }
@@ -147,8 +160,30 @@ public class OculusEntity : Entity {
         StartTracking();
     }
 
+    // Same behavior as host.
     public override void InitializeClient()
     {
-        
+        StartTracking();
+    }
+
+    public override void OnHostInitializationFinished()
+    {
+        // Clean up setup objects.
+        Destroy(cameraRig);
+        Destroy(localAvatar);
+
+        // Position entity
+        PositionEntity();
+
+        // Set up new objects.
+        cameraRig = Instantiate(cameraRigPrefab, transform.position, transform.rotation);
+        localAvatar = Instantiate(localAvatarPrefab, transform.position, transform.rotation);
+        GameObject avatar = PhotonNetwork.Instantiate(ovrAvatarPrefabName, transform.position, transform.rotation, 0);
+        avatar.GetComponent<OVRAvatarOwner>().eye = cameraRig.transform.Find("TrackingSpace").Find("CenterEyeAnchor");
+    }
+
+    public override void OnClientInitializationFinished()
+    {
+        OnHostInitializationFinished();
     }
 }
