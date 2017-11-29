@@ -17,7 +17,9 @@ public class OculusEntity : Entity {
     // Post-Initialization Prefab Names
     public GameObject cameraRigPrefab;
     public GameObject localAvatarPrefab;
-    public string ovrAvatarPrefabName;
+    public string ovrAvatarHeadPrefabName;
+    public string ovrAvatarLeftPrefabName;
+    public string ovrAvatarRightPrefabName;
 
     // CameraRig and LocalAvatar
     private GameObject cameraRig;
@@ -175,11 +177,17 @@ public class OculusEntity : Entity {
         // Position entity
         PositionEntity();
 
-        // Set up new objects.
+        // Set up new camera_rig + localavatar.
         cameraRig = Instantiate(cameraRigPrefab, transform.position, transform.rotation);
         localAvatar = Instantiate(localAvatarPrefab, transform.position, transform.rotation);
-        GameObject avatar = PhotonNetwork.Instantiate(ovrAvatarPrefabName, transform.position, transform.rotation, 0);
-        avatar.GetComponent<OVRAvatarOwner>().eye = cameraRig.transform.Find("TrackingSpace").Find("CenterEyeAnchor");
+
+        // Set up avatar for photon tracking.
+        GameObject avatarHead = PhotonNetwork.Instantiate(ovrAvatarHeadPrefabName, transform.position, transform.rotation, 0);
+        avatarHead.GetComponent<FollowTransform>().transformToFollow = cameraRig.transform.Find("TrackingSpace").Find("CenterEyeAnchor");
+        GameObject avatarLeft = PhotonNetwork.Instantiate(ovrAvatarLeftPrefabName, transform.position, transform.rotation, 0);
+        avatarLeft.GetComponent<FollowTransform>().transformToFollow = cameraRig.transform.Find("TrackingSpace").Find("LeftHandAnchor");
+        GameObject avatarRight = PhotonNetwork.Instantiate(ovrAvatarRightPrefabName, transform.position, transform.rotation, 0);
+        avatarRight.GetComponent<FollowTransform>().transformToFollow = cameraRig.transform.Find("TrackingSpace").Find("RightHandAnchor");
     }
 
     public override void OnClientInitializationFinished()

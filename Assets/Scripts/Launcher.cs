@@ -5,12 +5,12 @@ using UnityEngine.VR;
 
 public class Launcher : Photon.PunBehaviour {
 
-    // Oculus Entity
-    public GameObject oculusEntityPrefab;
-
-    // PC Entity
+    // Entity Prefabs
+    public GameObject oculusEntityPrefab;  
     public GameObject pcEntityPrefab;
+    public GameObject mobileEntityPrefab;
 
+    // Photon Settings
     public int logLevel = 3;
     public byte maxPlayers = 4;
     string _gameVersion = "1";
@@ -42,10 +42,9 @@ public class Launcher : Photon.PunBehaviour {
         if (VRDevice.isPresent)
             entityObject = Instantiate(oculusEntityPrefab);
         else
-            entityObject = Instantiate(pcEntityPrefab);
-            
+            entityObject = Instantiate(pcEntityPrefab); 
 #elif UNITY_IOS || UNITY_ANDROID
-
+        entityObject = Instantiate(mobileEntityPrefab);
 #endif
 
         entity = entityObject.GetComponent<Entity>();

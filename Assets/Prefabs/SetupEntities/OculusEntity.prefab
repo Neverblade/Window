@@ -70,4 +70,6 @@ MonoBehaviour:
     type: 2}
   localAvatarPrefab: {fileID: 1494658752139658, guid: becb5b73e663db74cb078081fb5e17f3,
     type: 2}
-  ovrAvatarPrefabName: OVRAvatarHead
+  ovrAvatarHeadPrefabName: HeadAvatar
+  ovrAvatarLeftPrefabName: LeftHandAvatar
+  ovrAvatarRightPrefabName: RightHandAvatar
