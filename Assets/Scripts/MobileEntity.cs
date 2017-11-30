@@ -24,18 +24,6 @@ public class MobileEntity : Entity {
     GameObject arCamera;
     GameObject imageTarget;
     GameObject avatar;
-    
-
-    private void Start()
-    {
-        // Spawn pre cam and canvas
-        preCamera = Instantiate(preCameraPrefab);
-        preCanvas = Instantiate(preCanvasPrefab);
-
-        // Set up callback
-        preCanvas.transform.Find("ConnectButton").GetComponent<Button>().onClick.AddListener(OnClientInitializationFinished);
-        preEventSystem = Instantiate(preEventSystemPrefab);
-    }
 
     public override void InitializeHost()
     {
@@ -49,7 +37,15 @@ public class MobileEntity : Entity {
 
     public override void InitializeClient()
     {
-        Debug.Log("INITIALIZING MOBILE CLIENT - DOES NOTHING");
+        Debug.Log("INITIALIZING MOBILE CLIENT");
+
+        // Spawn pre cam and canvas
+        preCamera = Instantiate(preCameraPrefab);
+        preCanvas = Instantiate(preCanvasPrefab);
+
+        // Set up callback
+        preCanvas.transform.Find("ConnectButton").GetComponent<Button>().onClick.AddListener(OnClientInitializationFinished);
+        preEventSystem = Instantiate(preEventSystemPrefab);
     }
 
     public override void OnClientInitializationFinished()
