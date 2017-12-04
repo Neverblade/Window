@@ -170,12 +170,40 @@ public class OculusEntity : Entity {
 
     public override void OnHostInitializationFinished()
     {
-        // Clean up setup objects.
+        StartCoroutine(Test());
+
+        /*// Clean up setup objects.
+        Destroy(GameObject.Find("OvrAvatarSDKManager"));
         Destroy(cameraRig);
         Destroy(localAvatar);
 
         // Position entity
         PositionEntity();
+
+        // Set up new camera_rig + localavatar.
+        cameraRig = Instantiate(cameraRigPrefab, transform.position, transform.rotation);
+        localAvatar = Instantiate(localAvatarPrefab, transform.position, transform.rotation);
+
+        // Set up avatar for photon tracking.
+        GameObject avatarHead = PhotonNetwork.Instantiate(ovrAvatarHeadPrefabName, transform.position, transform.rotation, 0);
+        avatarHead.GetComponent<FollowTransform>().transformToFollow = cameraRig.transform.Find("TrackingSpace").Find("CenterEyeAnchor");
+        GameObject avatarLeft = PhotonNetwork.Instantiate(ovrAvatarLeftPrefabName, transform.position, transform.rotation, 0);
+        avatarLeft.GetComponent<FollowTransform>().transformToFollow = cameraRig.transform.Find("TrackingSpace").Find("LeftHandAnchor");
+        GameObject avatarRight = PhotonNetwork.Instantiate(ovrAvatarRightPrefabName, transform.position, transform.rotation, 0);
+        avatarRight.GetComponent<FollowTransform>().transformToFollow = cameraRig.transform.Find("TrackingSpace").Find("RightHandAnchor");*/
+    }
+
+    IEnumerator Test()
+    {
+        // Clean up setup objects.
+        Destroy(GameObject.Find("OvrAvatarSDKManager"));
+        Destroy(cameraRig);
+        Destroy(localAvatar);
+
+        // Position entity
+        PositionEntity();
+
+        yield return new WaitForSeconds(.05f);
 
         // Set up new camera_rig + localavatar.
         cameraRig = Instantiate(cameraRigPrefab, transform.position, transform.rotation);
